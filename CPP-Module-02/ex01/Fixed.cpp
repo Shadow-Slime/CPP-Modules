@@ -8,6 +8,18 @@ Fixed::Fixed()
 	value = 0;
 }
 
+Fixed::Fixed(const int value)
+{
+	std::cout << "Int constructor called" << std::endl;
+	this->value = value << fract_bits;
+}
+
+Fixed::Fixed(const float value)
+{
+	std::cout << "Float constructor called" << std::endl;
+	this->value = (int)(roundf(value * (1 << fract_bits)));
+}
+
 Fixed::Fixed(const Fixed &copy)
 {
 	std::cout << "Copy constructor called" << std::endl;
@@ -39,3 +51,16 @@ void Fixed::setRawBits(int const raw)
 {
 	this->value = raw;
 }
+
+float Fixed::toFloat(void) const
+{
+	return ((float)value / (float)(1 << fract_bits));
+}
+
+int Fixed::toInt(void) const
+{
+	float tmp = (float)value / (float)(1 << fract_bits);
+	return ((int)tmp);
+}
+
+
