@@ -42,6 +42,56 @@ std::ostream &operator<<(std::ostream& out, const Fixed &fixed)
 	return (out);
 }
 
+bool Fixed::operator>(const Fixed& other) const
+{
+	return value > other.value;
+}
+
+bool Fixed::operator<(const Fixed& other) const
+{
+	return value < other.value;
+}
+
+bool Fixed::operator>=(const Fixed& other) const
+{
+	return value >= other.value;
+}
+
+bool Fixed::operator<=(const Fixed& other) const
+{
+	return value <= other.value;
+}
+
+bool Fixed::operator==(const Fixed& other) const
+{
+	return value == other.value;
+}
+
+bool Fixed::operator!=(const Fixed& other) const
+{
+	return value != other.value;
+}
+
+Fixed Fixed::operator+(const Fixed &copy) const
+{
+	Fixed result;
+
+	result.setRawBits(this->getRawBits() + copy.getRawBits());
+	return result;
+}
+
+Fixed Fixed::operator-(const Fixed &copy) const
+{
+	Fixed result;
+
+	result.setRawBits(this->getRawBits() - copy.getRawBits());
+	return result;
+}
+
+//Fixed operator*(const Fixed &copy) const;
+
+//Fixed operator/(const Fixed &copy) const;
+
 Fixed::~Fixed()
 {
 	std::cout << "Destructor called" << std::endl;
