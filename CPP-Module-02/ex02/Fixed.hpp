@@ -22,10 +22,10 @@ class Fixed
 		Fixed operator-(const Fixed &copy) const;
 		Fixed operator*(const Fixed &copy) const;
 		Fixed operator/(const Fixed &copy) const;
-		void operator++();
-		void operator++(int);
-		void operator--();
-		void operator--(int);
+		Fixed operator++();
+		Fixed operator++(int);
+		Fixed operator--();
+		Fixed operator--(int);
 		~Fixed();
 		int getRawBits(void) const;
 		void setRawBits(int const raw);

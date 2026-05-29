@@ -88,9 +88,49 @@ Fixed Fixed::operator-(const Fixed &copy) const
 	return result;
 }
 
-//Fixed operator*(const Fixed &copy) const;
+Fixed Fixed::operator*(const Fixed &copy) const
+{
+	Fixed result;
 
-//Fixed operator/(const Fixed &copy) const;
+	long long value = static_cast<long>(this->value * copy.value) / 1 << fract_bits;
+	result.setRawBits(value);
+	return result;
+}
+
+Fixed Fixed::operator/(const Fixed &copy) const
+{
+	Fixed result;
+
+	long long value = static_cast<long>(this->value / copy.value) * 1 << fract_bits;
+	result.setRawBits(value);
+	return result;
+}
+
+Fixed Fixed::operator++()
+{
+	this->value++;
+	return(*this);
+}
+
+Fixed Fixed::operator++(int)
+{
+	Fixed copy = *this;
+	this->value++;
+	return(copy);
+}
+
+Fixed Fixed::operator--()
+{
+	this->value--;
+	return(*this);
+}
+
+Fixed Fixed::operator--(int)
+{
+	Fixed copy = *this;
+	this->value--;
+	return(copy);
+}
 
 Fixed::~Fixed()
 {
