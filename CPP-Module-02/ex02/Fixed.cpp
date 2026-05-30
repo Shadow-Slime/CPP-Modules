@@ -92,7 +92,7 @@ Fixed Fixed::operator*(const Fixed &copy) const
 {
 	Fixed result;
 
-	long long value = static_cast<long>(this->value * copy.value) / 1 << fract_bits;
+	long long value = static_cast<long long>(this->value * copy.value) / (1 << fract_bits);
 	result.setRawBits(value);
 	return result;
 }
@@ -101,15 +101,15 @@ Fixed Fixed::operator/(const Fixed &copy) const
 {
 	Fixed result;
 
-	long long value = static_cast<long>(this->value / copy.value) * 1 << fract_bits;
+	long long value = static_cast<long long>(this->value << fract_bits) / copy.value;
 	result.setRawBits(value);
 	return result;
 }
 
-Fixed Fixed::operator++()
+Fixed &Fixed::operator++()
 {
 	this->value++;
-	return(*this);
+	return *this;
 }
 
 Fixed Fixed::operator++(int)
@@ -119,7 +119,7 @@ Fixed Fixed::operator++(int)
 	return(copy);
 }
 
-Fixed Fixed::operator--()
+Fixed &Fixed::operator--()
 {
 	this->value--;
 	return(*this);
@@ -155,8 +155,30 @@ float Fixed::toFloat(void) const
 
 int Fixed::toInt(void) const
 {
-	return ((int)this->toFloat());
+	return (value >> fract_bits);
 }
+
+Fixed &Fixed::min(Fixed &first, Fixed &second)
+{
+	return (first < second ? first : second);
+}
+
+const Fixed &Fixed::min(const Fixed &first, const Fixed &second)
+{
+	return (first < second ? first : second);
+}
+
+Fixed &Fixed::max(Fixed &first, Fixed &second)
+{
+	return (first > second ? first : second);
+}
+
+const Fixed &Fixed::max(const Fixed &first, const Fixed &second)
+{
+	return (first > second ? first : second);
+}
+
+
 
 
 

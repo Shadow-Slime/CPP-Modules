@@ -65,7 +65,7 @@ float Fixed::toFloat(void) const
 
 int Fixed::toInt(void) const
 {
-	return ((int)this->toFloat());
+	return (value >> fract_bits);
 }
 
 
