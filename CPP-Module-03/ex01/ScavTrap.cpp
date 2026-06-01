@@ -3,24 +3,24 @@
 ScavTrap::ScavTrap()
 {
 	std::cout << "ScavTrap default constructor called" << std::endl;
-	this->name = "scavtrap";
-	this->HitPoints = 100;
-	this->EnergyPoints = 50;
-	this->AttackDamage = 20;
-	this->GuardMode = false;
+	name = "scavtrap";
+	HitPoints = MaxHP = 100;
+	EnergyPoints = 50;
+	AttackDamage = 20;
+	GuardMode = false;
 }
 
 ScavTrap::ScavTrap(std::string name)
 {
 	std::cout << "ScavTrap constructor called" << std::endl;
-	this->name = name;
-	this->HitPoints = 100;
-	this->EnergyPoints = 50;
-	this->AttackDamage = 20;
-	this->GuardMode = false;
+	ScavTrap::name = name;
+	HitPoints = MaxHP = 100;
+	EnergyPoints = 50;
+	AttackDamage = 20;
+	GuardMode = false;
 }
 
-ScavTrap::ScavTrap(const ScavTrap &other)
+ScavTrap::ScavTrap(const ScavTrap &other) : ClapTrap(other)
 {
 	*this = other;
 }
