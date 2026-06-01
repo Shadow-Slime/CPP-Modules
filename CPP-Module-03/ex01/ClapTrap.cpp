@@ -31,8 +31,8 @@ ClapTrap &ClapTrap::operator=(const ClapTrap &other)
 	{
 		this->name = other.name;
 		this->HitPoints = other.HitPoints;
-		this->EnergyPoints = this->EnergyPoints;
-		this->AttackDamage = this->AttackDamage;
+		this->EnergyPoints = other.EnergyPoints;
+		this->AttackDamage = other.AttackDamage;
 	}
 	return *this;
 }
@@ -99,7 +99,7 @@ void ClapTrap::beRepaired(unsigned int amount)
 			std::cout << "ClapTrap " << this->name << " is already fully repaired!" << std::endl;
 	}
 	else
-		std::cout << "ClapTrap " << this->name << "has no energy left to attack!" << std::endl;
+		std::cout << "ClapTrap " << this->name << "has no energy left to repair itself!" << std::endl;
 }
 
 

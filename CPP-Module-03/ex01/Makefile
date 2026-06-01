@@ -1,5 +1,5 @@
 NAME    = main
-SRC     = main.cpp ClapTrap.cpp
+SRC     = main.cpp ClapTrap.cpp ScavTrap.cpp
 CPP     = c++
 CFLAGS  = -Wall -Wextra -Werror -std=c++98
 
