@@ -47,6 +47,7 @@ int main(void)
 	blingbling.guardGate();
 	blingbling.guardGate();
 	blingbling.attack("An inferior gem");
+	blingbling.whoAmI();
 	}
 	
 }
