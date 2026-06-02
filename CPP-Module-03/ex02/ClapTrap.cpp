@@ -4,7 +4,7 @@ ClapTrap::ClapTrap()
 {
 	std::cout << "ClapTrap default constructor called" << std::endl;
 	ClapTrap::name = "claptrap";
-	HitPoints = 10;
+	HitPoints = MaxHP = 10;
 	EnergyPoints = 10;
 	AttackDamage = 0;
 }
@@ -13,7 +13,7 @@ ClapTrap::ClapTrap(std::string name)
 {
 	std::cout << "ClapTrap constructor called" << std::endl;
 	ClapTrap::name = name;
-	HitPoints = 10;
+	HitPoints = MaxHP = 10;
 	EnergyPoints = 10;
 	AttackDamage = 0;
 }
@@ -33,6 +33,7 @@ ClapTrap &ClapTrap::operator=(const ClapTrap &other)
 		this->HitPoints = other.HitPoints;
 		this->EnergyPoints = other.EnergyPoints;
 		this->AttackDamage = other.AttackDamage;
+		this->MaxHP = other.MaxHP;
 	}
 	return *this;
 }
@@ -86,20 +87,20 @@ void ClapTrap::beRepaired(unsigned int amount)
 	}
 	if (this->EnergyPoints > 0)
 	{
-		if (this->HitPoints < 10)
+		if (this->HitPoints < MaxHP)
 		{
 			std::cout << "ClapTrap " << this->name << " repairs itself for " << amount << " points of health!" << std::endl;
-			if (this->HitPoints + amount <= 10)
+			if (this->HitPoints + amount <= MaxHP)
 				this->HitPoints += amount;
 			else
-				this->HitPoints = 10;
+				this->HitPoints = MaxHP;
 			this->EnergyPoints--;
 		}
 		else
 			std::cout << "ClapTrap " << this->name << " is already fully repaired!" << std::endl;
 	}
 	else
-		std::cout << "ClapTrap " << this->name << "has no energy left to attack!" << std::endl;
+		std::cout << "ClapTrap " << this->name << "has no energy left to repair itself!" << std::endl;
 }
 
 
