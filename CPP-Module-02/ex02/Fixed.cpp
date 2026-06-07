@@ -17,7 +17,7 @@ Fixed::Fixed(const int value)
 Fixed::Fixed(const float value)
 {
 	std::cout << "Float constructor called" << std::endl;
-	this->value = (int)(roundf(value * (1 << fract_bits))); //same as multiplying by 2^fract_bits
+	this->value = static_cast<int>(roundf(value * (1 << fract_bits))); //same as multiplying by 2^fract_bits
 }
 
 Fixed::Fixed(const Fixed &copy)
