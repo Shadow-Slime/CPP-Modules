@@ -1,5 +1,9 @@
 #include "HumanA.hpp"
 
+HumanA::~HumanA()
+{
+}
+
 HumanA::HumanA(std::string name, Weapon &weapon):weapon(weapon)
 {
 	HumanA::name = name;
