@@ -1,7 +1,7 @@
 NAME    = main
 SRC     = main.cpp find_and_replace.cpp
-CPP     = c++
-CFLAGS  = -Wall -Wextra -Werror -std=c++98
+CXX     = c++
+CXXFLAGS  = -Wall -Wextra -Werror -std=c++98
 
 OBJ_DIR = obj
 OBJS    = $(addprefix $(OBJ_DIR)/, $(SRC:.cpp=.o))
@@ -9,10 +9,10 @@ OBJS    = $(addprefix $(OBJ_DIR)/, $(SRC:.cpp=.o))
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CPP) $(CFLAGS) -o $@ $^
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 $(OBJ_DIR)/%.o: %.cpp | $(OBJ_DIR)
-	$(CPP) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)

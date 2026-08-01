@@ -40,6 +40,6 @@ void Harl::complain(std::string level)
 			return ;
 		}
 	}
-	std::cerr << "Non existent complaint level" << std::endl;
+	std::cout << "Non existent complaint level" << std::endl;
 }
 
