@@ -17,13 +17,19 @@ int main()
 	std::cout << "-----------------------Deep copy---------------------------------" << std::endl;
 	Dog *puppy = new Dog();
 	puppy->setIdea(0, "Biscuits");
-	Dog *wolf = new Dog(*puppy);
+	Dog *wolf = new Dog();
+	*wolf = *puppy;
 	std::cout << "\n" << "Puppy thinks " << puppy->getIdea(0) << "\n" << std::endl;
 	std::cout << "\n" << "Wolf thinks " << wolf->getIdea(0) << "\n" << std::endl;
 	delete puppy;
 	std::cout << "\n" << "Wolf still thinks " << wolf->getIdea(0) << "\n" << std::endl;
 	delete wolf;
-}
+	std::cout << std::endl;
+	Dog bau;
+	Dog woof(bau);
+// 	Cat *meowy = new Cat();
+// 	Cat *tiger = new 
+	}
 {
 	std::cout << "\nWill not compile if an attempt is made to declare a static object of an abstract class\n" << std::endl;
 	const A_Animal &b = Cat();
