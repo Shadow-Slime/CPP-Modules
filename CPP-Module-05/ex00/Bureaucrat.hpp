@@ -23,12 +23,12 @@ class Bureaucrat
 		public:
 			const char* what() const throw();
 		};
-		const std::string getName();
-		int getGrade();
+		std::string getName() const;
+		int getGrade() const;
 		void inc_grade();
 		void dec_grade();
 };
 
-
+std::ostream &operator<<(std::ostream &out, const Bureaucrat &obj);
 
 #endif

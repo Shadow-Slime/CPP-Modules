@@ -24,12 +24,12 @@ Bureaucrat::Bureaucrat(std::string n_name, int n_grade) : name(n_name)
 	catch(const GradeTooHighException& h)
 	{
 		std::cout << h.what() << std::endl;
-		n_grade = 1;
+		grade = 1;
 	}
 	catch(const GradeTooLowException& l)
 	{
 		std::cout << l.what() << std::endl;
-		n_grade = 150;
+		grade = 150;
 	}
 }
 
@@ -50,12 +50,12 @@ Bureaucrat::~Bureaucrat()
 {
 }
 
-const std::string Bureaucrat::getName()
+std::string Bureaucrat::getName() const
 {
 	return (name);
 }
 
-int Bureaucrat::getGrade()
+int Bureaucrat::getGrade() const
 {
 	return (grade);
 }
@@ -86,4 +86,10 @@ void Bureaucrat::dec_grade()
 	{
 		std::cout << e.what() << std::endl;
 	}
+}
+
+std::ostream &operator<<(std::ostream &out, const Bureaucrat &obj)
+{
+	out << obj.getName() << ", bureaucrat grade " << obj.getGrade();
+	return out;
 }
