@@ -16,6 +16,7 @@ Cat &Cat::operator=(const Cat &other)
 {
 	if (this != &other)
 	{
+		delete brain;
 		this->type = other.type;
 		this->brain = new Brain(*other.brain);
 	}
