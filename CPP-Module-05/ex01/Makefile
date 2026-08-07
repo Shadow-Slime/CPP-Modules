@@ -1,5 +1,5 @@
 NAME    = main
-SRC     = main.cpp Bureaucrat.cpp
+SRC     = main.cpp Bureaucrat.cpp Form.cpp
 CXX     = c++
 CXXFLAGS  = -Wall -Wextra -Werror -std=c++98
 
