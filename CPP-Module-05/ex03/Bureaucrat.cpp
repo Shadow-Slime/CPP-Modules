@@ -94,7 +94,7 @@ std::ostream &operator<<(std::ostream &out, const Bureaucrat &obj)
 	return out;
 }
 
-void Bureaucrat::signForm(Form &obj)
+void Bureaucrat::signForm(AForm &obj)
 {
 	try
 	{
@@ -105,4 +105,18 @@ void Bureaucrat::signForm(Form &obj)
 	{
 		std::cout << this->getName() << " couldn't sign " << obj.getName()  << " because their grade is too low!" << std::endl;
 	}
+}
+
+void Bureaucrat::executeForm(AForm const &form) const
+{
+	try
+	{
+		form.execute(*this);
+		std::cout << this->getName() << " executed " << form.getName() << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	
 }

@@ -55,9 +55,11 @@ bool Form::is_It_Signed() const
 	return (this->is_signed);
 }
 
-void Form::beSigned()
+void Form::beSigned(const Bureaucrat &signer)
 {
-	if (!this->is_It_Signed())
+	if (signer.getGrade() > this->getGradetoSign())
+		throw(GradeTooLowException());
+	else
 		this->is_signed = true;
 }
 
