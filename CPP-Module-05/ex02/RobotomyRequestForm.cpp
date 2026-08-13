@@ -23,6 +23,7 @@ RobotomyRequestForm::~RobotomyRequestForm()
 void RobotomyRequestForm::executeAction() const
 {
 	std::cout << "*DRILLING NOISES*" << std::endl;
+	std::srand(time(NULL));
 	if (std::rand() % 2)
 		std::cout << this->target << " has been robotomized successfully!" << std::endl;
 	else

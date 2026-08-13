@@ -26,7 +26,6 @@ int main()
 		Bureaucrat b("Jill", 150);
 		Bureaucrat c("Kill", 1);
 
-		std::srand(time(NULL));
 		RobotomyRequestForm Form("Hillbilly");
 
 		a.executeForm(Form);
