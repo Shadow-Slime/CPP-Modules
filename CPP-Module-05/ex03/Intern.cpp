@@ -10,6 +10,7 @@ Intern::Intern(const Intern &other)
 
 Intern &Intern::operator=(const Intern &other)
 {
+	(void)other;
 	return *this;
 }
 
@@ -47,6 +48,7 @@ AForm *Intern::makeForm(std::string form_name, std::string target)
 			default:
 				throw(NonExistentFormException());
 		}
+		std::cout << "Intern creates " << names[i] << " form." << std::endl;
 	}
 	catch(const std::exception& e)
 	{

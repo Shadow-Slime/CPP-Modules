@@ -1,5 +1,5 @@
 NAME    = main
-SRC     = main.cpp Bureaucrat.cpp AForm.cpp PresidentialPardonForm.cpp RobotomyRequestForm.cpp ShrubberyRequestForm.cpp
+SRC     = main.cpp Bureaucrat.cpp AForm.cpp PresidentialPardonForm.cpp RobotomyRequestForm.cpp ShrubberyRequestForm.cpp Intern.cpp
 CXX     = c++
 CXXFLAGS  = -Wall -Wextra -Werror -std=c++98
 
@@ -22,6 +22,7 @@ clean:
 
 fclean: clean
 	@rm -f $(NAME)
+	@rm -f Aplace_shrubbery
 
 re: fclean all
 
