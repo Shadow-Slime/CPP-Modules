@@ -22,7 +22,7 @@ static bool isChar(const std::string& s)
 	if (s.size() != 1)
 		return false;
 	unsigned char c = static_cast<unsigned char>(s[0]);
-	return !std::isdigit(c);
+	return (c <= 127 && !std::isdigit(c));
 }
 
 static bool isInt(const std::string& s, int& out) {
@@ -68,13 +68,59 @@ void ScalarConverter::convert(std::string literal)
 {
 	if (literal == "nan" || literal == "nanf" || literal == "-inf" || literal == "+inf" || literal == "+inff" || literal == "-inff")
 		return (print_pseudo_literal(literal));
+	char c = literal[0];
 	int i;
 	float f;
 	double d;
-	if (isChar(literal))
+	bool is_char = isChar(literal);
+	bool is_int = isInt(literal, i);
+	bool is_float = isFloat(literal, f);
+	bool is_double = isDouble(literal, d);
+	(void)is_double;
+	if (is_char)
 	{
-		if (std::isprint(literal[0]))
-			std::cout << "char: " << 
+		if (std::isprint(c))
+			std::cout << "char: '" << c << "'" << std::endl;
+		else
+			std::cout << "char: Non displayable" << std::endl;
+		std::cout << "int: " << static_cast<int>(c) << std::endl;
+		std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(c) << "f" << std::endl;
+		std::cout << "double: " << static_cast<double>(c) << std::endl;
+		return ;
+	}
+	if (is_int)
+	{
+		if (i >= 0 && i <= 127)
+		{
+			c = static_cast<char>(i);
+			if (std::isprint(c))
+				std::cout << "char: '" << c << "'" << std::endl;
+			else
+				std::cout << "char: Non displayable" << std::endl;
+		}
+		else
+			std::cout << "char: impossible" << std::endl;
+		std::cout << "int: " << i << std::endl;
+		std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(i) << "f" << std::endl;
+		std::cout << "double: " << static_cast<double>(i) << std::endl;
+		return ;
+	}
+	if (is_float)
+	{
+		if ((roundf(f) == f) && (f >= 0 && f <= 127))
+		{
+			c = static_cast<char>(f);
+			if (std::isprint(c))
+				std::cout << "char: '" << c << "'" << std::endl;
+			else
+				std::cout << "char: Non displayable" << std::endl;
+		}
+		else
+			std::cout << "char: impossible" << std::endl;
+		std::cout << "int: " << static_cast<int>(f) << std::endl;
+		std::cout << "float: " << f << "f" << std::endl;
+		std::cout << "double: " << static_cast<double>(f) << std::endl;
+		return ;
 	}
 
 }
