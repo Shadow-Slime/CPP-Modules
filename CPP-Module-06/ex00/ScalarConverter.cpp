@@ -33,7 +33,7 @@ static bool isInt(const std::string& s, int& out) {
 	long val = std::strtol(s.c_str(), &end, 10);
 	if (*end != '\0')
 		return false;
-	if (errno == ERANGE || val > INT_MAX || val < INT_MIN)
+	if (errno == ERANGE || val > std::numeric_limits<int>::max() || val < std::numeric_limits<int>::min())
 		return false;
 	out = static_cast<int>(val);
 	return true;
@@ -46,8 +46,11 @@ static bool isFloat(const std::string& s, float& out) {
 	if (digits.empty())
 		return false;
 	char* end;
+	errno = 0;
 	double val = std::strtod(digits.c_str(), &end);
 	if (*end != '\0')
+		return false;
+	if (errno == ERANGE || val > std::numeric_limits<float>::max() || val < -(std::numeric_limits<float>::max()))
 		return false;
 	out = static_cast<float>(val);
 	return true;
@@ -76,7 +79,6 @@ void ScalarConverter::convert(std::string literal)
 	bool is_int = isInt(literal, i);
 	bool is_float = isFloat(literal, f);
 	bool is_double = isDouble(literal, d);
-	(void)is_double;
 	if (is_char)
 	{
 		if (std::isprint(c))
@@ -117,12 +119,41 @@ void ScalarConverter::convert(std::string literal)
 		}
 		else
 			std::cout << "char: impossible" << std::endl;
-		std::cout << "int: " << static_cast<int>(f) << std::endl;
+		if (f > std::numeric_limits<int>::min() && f < std::numeric_limits<int>::max())
+			std::cout << "int: " << static_cast<int>(f) << std::endl;
+		else
+			std::cout << "int: impossible" << std::endl;
 		std::cout << "float: " << f << "f" << std::endl;
 		std::cout << "double: " << static_cast<double>(f) << std::endl;
 		return ;
 	}
-
+	if (is_double)
+	{
+		if ((roundf(d) == d) && (d >= 0 && d <= 127))
+		{
+			c = static_cast<char>(d);
+			if (std::isprint(c))
+				std::cout << "char: '" << c << "'" << std::endl;
+			else
+				std::cout << "char: Non displayable" << std::endl;
+		}
+		else
+			std::cout << "char: impossible" << std::endl;
+		if (d > std::numeric_limits<int>::min() && d < std::numeric_limits<int>::max())
+			std::cout << "int: " << static_cast<int>(d) << std::endl;
+		else
+			std::cout << "int: impossible" << std::endl;
+		if (d > -(std::numeric_limits<float>::max()) && d < std::numeric_limits<float>::max())
+			std::cout << "float: " << static_cast<float>(d) << std::endl;
+		else
+			std::cout << "float: impossible" << std::endl;
+		std::cout << "double: " << d << std::endl;
+		return ;
+	}
+	std::cout << "char: impossible" << std::endl;
+	std::cout << "int: impossible" << std::endl;
+	std::cout << "float: impossible" << std::endl;
+	std::cout << "double: impossible" << std::endl;
 }
 
 

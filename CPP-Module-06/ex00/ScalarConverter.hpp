@@ -6,7 +6,7 @@
 #include <string>
 #include <cctype>
 #include <cstdlib>
-#include <climits>
+#include <limits>
 #include <cerrno>
 #include <cmath>
 
