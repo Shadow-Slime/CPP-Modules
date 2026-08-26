@@ -1,8 +1,8 @@
 #include "Array.hpp"
 
-template <typename T>Array<T>::Array() : arr(new T[0]), arr_size(0)
+template <typename T>Array<T>::Array() : arr(new T[1]), arr_size(0)
 {
-
+	arr[0] = 0;
 }
 
 template <typename T>Array<T>::Array(unsigned int n) : arr(new T[n]), arr_size(n)
@@ -36,7 +36,7 @@ template <typename T> Array<T>::~Array()
 
 template <typename T> T &Array<T>::operator[](unsigned int index)
 {
-	if (index > size())
+	if (index >= size())
 		throw(std::out_of_range("out of bounds access"));
 	return arr[index];
 }
