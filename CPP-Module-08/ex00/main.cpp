@@ -2,6 +2,7 @@
 #include <vector>
 #include <list>
 #include <deque>
+#include <map>
 #include "easyfind.hpp"
 
 template <typename T>
