@@ -2,7 +2,7 @@
 #include "AForm.hpp"
 #include "PresidentialPardonForm.hpp"
 #include "RobotomyRequestForm.hpp"
-#include "ShrubberyRequestForm.hpp"
+#include "ShrubberyCreationForm.hpp"
 int main()
 {
 	{
@@ -42,7 +42,7 @@ int main()
 		Bureaucrat b("Jill", 150);
 		Bureaucrat c("Kill", 1);
 
-		ShrubberyRequestForm Form("House");
+		ShrubberyCreationForm Form("House");
 
 		a.executeForm(Form);
 		b.signForm(Form);

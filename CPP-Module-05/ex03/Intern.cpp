@@ -26,7 +26,7 @@ const char* Intern::NonExistentFormException::what() const throw()
 
 AForm *Intern::makeForm(std::string form_name, std::string target)
 {
-	std::string names[3] = {"presidential pardon request", "robotomy request", "shrubbery request"};
+	std::string names[3] = {"presidential pardon request", "robotomy request", "shrubbery creation"};
 	AForm *form = NULL;
 	int i;
 	for (i = 0; i < 3; i++)
@@ -43,7 +43,7 @@ AForm *Intern::makeForm(std::string form_name, std::string target)
 				form = new RobotomyRequestForm(target);
 				break;
 			case 2:
-				form = new ShrubberyRequestForm(target);
+				form = new ShrubberyCreationForm(target);
 				break;
 			default:
 				throw(NonExistentFormException());
@@ -52,7 +52,7 @@ AForm *Intern::makeForm(std::string form_name, std::string target)
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cout << e.what() << std::endl;
 	}
 	return form;
 }

@@ -2,7 +2,7 @@
 #include "AForm.hpp"
 #include "PresidentialPardonForm.hpp"
 #include "RobotomyRequestForm.hpp"
-#include "ShrubberyRequestForm.hpp"
+#include "ShrubberyCreationForm.hpp"
 #include "Intern.hpp"
 int main()
 {
@@ -14,7 +14,7 @@ int main()
 
 		AForm *form1 = Jerry.makeForm("presidential pardon request", "Bob");
 		AForm *form2 = Jerry.makeForm("robotomy request", "Bender");
-		AForm *form3 = Jerry.makeForm("shrubbery request", "Aplace");
+		AForm *form3 = Jerry.makeForm("shrubbery creation", "Aplace");
 		AForm *form4 = Jerry.makeForm("some request", "A time");
 
 

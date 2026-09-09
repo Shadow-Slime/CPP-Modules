@@ -1,31 +1,31 @@
-#include "ShrubberyRequestForm.hpp"
+#include "ShrubberyCreationForm.hpp"
 
-const char* ShrubberyRequestForm::FileErrorException::what() const throw()
+const char* ShrubberyCreationForm::FileErrorException::what() const throw()
 {
 	return ("Error upon opening the file");
 }
 
-ShrubberyRequestForm::ShrubberyRequestForm(std::string new_target) : AForm("ShrubberyRequestForm", 145, 137), target(new_target)
+ShrubberyCreationForm::ShrubberyCreationForm(std::string new_target) : AForm("ShrubberyCreationForm", 145, 137), target(new_target)
 {
 
 }
 
-ShrubberyRequestForm::ShrubberyRequestForm(const ShrubberyRequestForm &other) : AForm(other.getName(), 145, 137), target(other.target)
+ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other) : AForm(other.getName(), 145, 137), target(other.target)
 {
 
 }
 
-ShrubberyRequestForm &ShrubberyRequestForm::operator=(const ShrubberyRequestForm &other)
+ShrubberyCreationForm &ShrubberyCreationForm::operator=(const ShrubberyCreationForm &other)
 {
 	if (this != &other)
 		this->target = other.target;
 	return *this;
 }
 
-ShrubberyRequestForm::~ShrubberyRequestForm()
+ShrubberyCreationForm::~ShrubberyCreationForm()
 {}
 
-void ShrubberyRequestForm::executeAction() const
+void ShrubberyCreationForm::executeAction() const
 {
 	std::string name = target + "_shrubbery";
 	std::fstream file;

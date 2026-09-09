@@ -116,7 +116,7 @@ void Bureaucrat::executeForm(AForm const &form) const
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cout << e.what() << std::endl;
 	}
 	
 }
