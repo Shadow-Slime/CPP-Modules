@@ -8,5 +8,10 @@ int main(int argc, char **argv)
 		std::cout << "Error: could not open file." << std::endl;
 		return 1;
 	}
-	//take a file as an argument
+	BitcoinExchange btc;
+	btc.Openfile(argv[1]);
+	std::string str;
+	std::getline(btc.input, str);
+	std::cout << str << std::endl;
+	return 0;
 }
