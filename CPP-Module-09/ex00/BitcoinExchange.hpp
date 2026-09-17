@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <fstream>
+#include <cstdlib>
 
 class BitcoinExchange
 {
@@ -14,9 +15,10 @@ class BitcoinExchange
 		~BitcoinExchange();
 		int Openfile(const char *filename);
 		void Closefile(void);
-		std::fstream input;
+		int CreateDatamap(void);
+		std::fstream file;
 	private:
-		std::map<int, float> data;
+		std::map<std::string, float> data;
 		
 };
 
