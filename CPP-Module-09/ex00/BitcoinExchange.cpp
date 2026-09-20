@@ -37,6 +37,15 @@ void BitcoinExchange::Closefile(void)
 	file.close();
 }
 
+//PARSING
+
+static int parse_date(std::string )
+
+static int parse_data_line(std::string line)
+{
+
+}
+
 int BitcoinExchange::CreateDatamap(void)
 {
 	if (!Openfile("data.csv"))
@@ -54,10 +63,10 @@ int BitcoinExchange::CreateDatamap(void)
 	char *end;
 	while (std::getline(file, buffer))
 	{
+
 		date = buffer.substr(0, 10);
-		value = strtod(buffer.substr(11, buffer.length()).c_str(), &end);
-		data[date] = value;
+		value = strtod(buffer.c_str() + 11, &end);
+		data.insert(std::make_pair(date, value));
 	}
-	std::cout << data.at("2010-11-20") << std::endl; // 0.29
-	return 0;
+	return 1;
 }
