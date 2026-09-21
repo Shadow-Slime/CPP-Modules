@@ -10,6 +10,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	BitcoinExchange btc;
-	btc.CreateDatamap();
+	if (!btc.CreateDatamap())
+		std::cout << "Error" << std::endl;
 	return 0;
 }
