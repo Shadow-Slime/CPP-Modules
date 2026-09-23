@@ -24,7 +24,7 @@ BitcoinExchange::~BitcoinExchange()
 
 }
 
-int BitcoinExchange::Openfile(const char *filename)
+int BitcoinExchange::openFile(const char *filename)
 {
 	file.open(filename, std::ios::in);
 	if (!file)
@@ -32,7 +32,7 @@ int BitcoinExchange::Openfile(const char *filename)
 	return 1;
 }
 
-void BitcoinExchange::Closefile(void)
+void BitcoinExchange::closeFile(void)
 {
 	file.close();
 }
@@ -58,12 +58,14 @@ static bool isLeapYear(int year)
 	return (year % 400 == 0);
 }
 
-static bool validate_date(std::string date)
+static bool isValidDate(std::string date)
 {
 	std::istringstream iss(date);
 	int year, month, day;
 	char dash1, dash2;
 
+	if (date.size() != 10)
+		return false;
 	if (!(iss >> year >> dash1 >> month >> dash2 >> day) || (dash1 != '-' || dash2 != '-') || !iss.eof())
 		return false;
 	if (year < 0 || year > 9999)
@@ -76,7 +78,7 @@ static bool validate_date(std::string date)
 	return true;
 }
 
-static bool validate_value(std::string valuestr, float &value)
+static bool isValidValue(std::string valuestr, float &value)
 {
 	std::istringstream iss(valuestr);
 	if (!(iss >> value) || !iss.eof())
@@ -84,18 +86,14 @@ static bool validate_value(std::string valuestr, float &value)
 	return true;
 }
 
-int BitcoinExchange::CreateDatamap(void)
+int BitcoinExchange::createDatamap(void)
 {
-	if (!Openfile("data.csv"))
+	if (!openFile("data.csv"))
 		return 0;			//possibly replaced with exception
-	
 	std::string buffer;
 	std::getline(file, buffer);
 	if (buffer != "date,exchange_rate")
-	{
-		Closefile();
-		return 0;
-	}
+		return (closeFile(), 0);
 	std::string date;
 	std::string valuestr;
 	float value;
@@ -104,22 +102,89 @@ int BitcoinExchange::CreateDatamap(void)
 	{
 		sep = buffer.find(',');
 		if (sep == std::string::npos)
-		{
-			return 0; //possibly replaced with exception
-		}
+			return (closeFile(), 0); //possibly replaced with exception
 		date = strtrim(buffer.substr(0, sep));
 		valuestr = strtrim(buffer.substr(sep + 1));
-		if (!validate_date(date))
+		if (!isValidDate(date))
 		{
 			std::cout << "Failed with: " << date << std::endl;
-			return 0; //possibly replaced with exception
+			return (closeFile(), 0); //possibly replaced with exception
 		}
-		if (!validate_value(valuestr, value))
+		if (!isValidValue(valuestr, value))
 		{
 			std::cout << "Failed with: " << valuestr << std::endl;
-			return 0;
+			return (closeFile(), 0);
 		}
 		data.insert(std::make_pair(date, value));
 	}
-	return 1;
+	return (closeFile(), 1);
+}
+
+int BitcoinExchange::processInput(const char *filename)
+{
+	if (!openFile(filename))
+	{
+		std::cout << "Error: could not open file." << std::endl;
+		return 0;
+	}
+	std::string buffer;
+	std::getline(file, buffer);
+	if (buffer != "date | value")
+	{
+		std::cout << "Invalid input" << std::endl;
+		return (closeFile(), 0);
+	}
+	std::string date;
+	std::string valuestr;
+	float value;
+	std::string::size_type sep;
+	while (std::getline(file, buffer))
+	{
+		if (buffer.empty())
+			continue;
+		sep = buffer.find('|');
+		if (sep == std::string::npos)
+		{
+			std::cout << "Error: bad input => " << buffer << std::endl;
+			continue;
+		}
+		date = strtrim(buffer.substr(0, sep));
+		valuestr = strtrim(buffer.substr(sep + 1));
+		if (!isValidDate(date))
+		{
+			std::cout << "Error: bad input => " << date << std::endl;
+			continue;
+		}
+		if (!isValidValue(valuestr, value))
+		{
+			std::cout << "Error: bad input => " << valuestr << std::endl;
+			continue;
+		}
+		if (value > 1000)
+		{
+			std::cout << "Error: too large number" << std::endl;
+			continue;
+		}
+		if (value < 0)
+		{
+			std::cout << "Error: not a positive number" << std::endl;
+			continue;
+		}
+		std::map<std::string, float>::iterator it = data.lower_bound(date);
+
+		if (it != data.end() && it->first == date)
+		{
+			std::cout << date << " => " << valuestr << " = " << it->second * value << std::endl;
+		}
+		else if (it == data.begin())
+		{
+			std::cout << date << " => " << valuestr << " = " << it->second * value << std::endl;
+		}
+		else
+		{
+			--it;
+			std::cout << date << " => " << valuestr << " = " << it->second * value << std::endl;
+		}
+	}
+	return (closeFile(), 1);
 }

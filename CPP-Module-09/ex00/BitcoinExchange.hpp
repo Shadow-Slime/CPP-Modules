@@ -14,9 +14,10 @@ class BitcoinExchange
 		BitcoinExchange(const BitcoinExchange &other);
 		BitcoinExchange &operator=(const BitcoinExchange &other);
 		~BitcoinExchange();
-		int Openfile(const char *filename);
-		void Closefile(void);
-		int CreateDatamap(void);
+		int openFile(const char *filename);
+		void closeFile(void);
+		int createDatamap(void);
+		int processInput(const char *filename);
 		std::fstream file;
 	private:
 		std::map<std::string, float> data;
