@@ -13,9 +13,9 @@ class RPN
 		RPN &operator=(const RPN &other);
 		~RPN();
 		bool isOperator(char c);
-		bool processExpr(std::string expr, int &result);
+		bool processExpr(std::string expr, float &result);
 	private:
-		std::stack<int> nums;
+		std::stack<float> nums;
 };
 
 #endif

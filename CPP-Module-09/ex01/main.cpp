@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 		std::cout << "Error" << std::endl;
 		return 1;
 	}
-	int result;
+	float result;
 	RPN rpn;
 	if (!rpn.processExpr(argv[1], result))
 	{

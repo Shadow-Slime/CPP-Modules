@@ -15,11 +15,10 @@ bool RPN::isOperator(char c)
 	return (c == '+' || c == '-' || c == '*' || c == '/');
 }
 
-bool RPN::processExpr(std::string expr, int &result)
+bool RPN::processExpr(std::string expr, float &result)
 {
 	float operand1;
 	float operand2;
-	float res;
 	for (unsigned int i = 0; i < expr.size(); i++)
 	{
 		if ((i != 0 && i % 2 != 0) && expr[i] == ' ')
@@ -38,20 +37,18 @@ bool RPN::processExpr(std::string expr, int &result)
 			operand1 = nums.top();
 			nums.pop();
 			if (expr[i] == '+')
-				res = operand1 + operand2;
+				result = operand1 + operand2;
 			if (expr[i] == '-')
-				res = operand1 - operand2;
+				result = operand1 - operand2;
 			if (expr[i] == '*')
-				res = operand1 * operand2;
+				result = operand1 * operand2;
 			if (expr[i] == '/')
 			{
 				if (operand2 == 0)
 					return false;
-				res = operand1 / operand2;
+				result = operand1 / operand2;
 			}
-			if (res > std::numeric_limits<int>::max() || res < std::numeric_limits<int>::min())
-				return false;
-			nums.push(res);
+			nums.push(result);
 			continue;
 		}
 		return false;
