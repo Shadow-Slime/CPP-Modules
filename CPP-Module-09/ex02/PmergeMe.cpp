@@ -20,8 +20,13 @@ bool PmergeMe::validInput(int argc, char **argv)
 	if (argc <= 1)
 		return false;
 	vec.reserve(argc - 1);
-	for (int i = 0; argv[i]; i++)
+	long val;
+	
+	for (int i = 1; argv[i]; i++)
 	{
+		std::istringstream iss(argv[i]);
+		if (!iss >> val || !iss.eof())
+			return false;
 		
 	}
 }

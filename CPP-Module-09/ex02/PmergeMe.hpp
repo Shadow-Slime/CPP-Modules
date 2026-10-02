@@ -6,6 +6,7 @@
 #include <deque>
 #include <sstream>
 #include <algorithm>
+#include <limits>
 
 class PmergeMe
 {
