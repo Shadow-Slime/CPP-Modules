@@ -16,6 +16,9 @@ class PmergeMe
 		PmergeMe &operator=(const PmergeMe &other);
 		~PmergeMe();
 		bool validInput(int argc, char **argv);
+		void displayVec(void);
+		void displayDeq(void);
+		void sort(void);
 	private:
 		std::vector<int> vec;
 		std::deque<int> deq;
