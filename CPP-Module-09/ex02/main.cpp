@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 		return 1;
 	std::cout << "Before: ";
 	obj.displayVec();
-	obj.sort();
+	obj.vec = obj.sort_vec(obj.vec);
 	std::cout << "After: ";
 	obj.displayVec();
 }

@@ -18,10 +18,13 @@ class PmergeMe
 		bool validInput(int argc, char **argv);
 		void displayVec(void);
 		void displayDeq(void);
-		void sort(void);
-	private:
+		std::vector<int> sort_vec(std::vector<int> values);
+		void sort_deq(void);
 		std::vector<int> vec;
 		std::deque<int> deq;
+	private:
+		// std::vector<int> vec;
+		// std::deque<int> deq;
 };
 
 #endif
