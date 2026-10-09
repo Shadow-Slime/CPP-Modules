@@ -83,6 +83,7 @@ std::vector<int> PmergeMe::sort_vec(std::vector<int> values)
 		ret.push_back(values[0]);
 		return ret;
 	}
+	
 	winners.reserve(sample_size % 2);
 	losers.reserve(sample_size % 2);
 
