@@ -18,6 +18,7 @@ class PmergeMe
 		bool validInput(int argc, char **argv);
 		void displayVec(void);
 		void displayDeq(void);
+		std::vector<size_t> insertionOrder(size_t m);
 		std::vector<int> sort_vec(std::vector<int> values);
 		void sort_deq(void);
 		std::vector<int> vec;

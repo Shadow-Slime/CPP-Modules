@@ -70,13 +70,30 @@ void PmergeMe::displayDeq(void)
 	std::cout << std::endl;
 }
 
+std::vector<size_t> PmergeMe::insertionOrder(size_t m)   // 1-based indices, excluding b1
+{
+	std::vector<size_t> order;
+	size_t prev = 1;   // consecutive Jacobsthal numbers: 1, 3, 5, 11, ...
+	size_t cur = 3;
+	while (prev < m)
+	{
+		size_t top = (cur < m) ? cur : m;
+		for (size_t k = top; k > prev; --k)
+			order.push_back(k);
+		size_t next = cur + 2 * prev;   // J(n) = J(n-1) + 2*J(n-2)
+		prev = cur;
+		cur = next;
+	}
+	return order;
+}
+
 std::vector<int> PmergeMe::sort_vec(std::vector<int> values)
 {
 	//std::sort(vec.begin(), vec.end());
 	std::vector<int> winners;
 	std::vector<int> losers;
 	size_t sample_size = values.size();
-	std::cout << sample_size << std::endl;
+	//std::cout << sample_size << std::endl;
 	if (sample_size == 1)
 	{
 		std::vector<int> ret;
@@ -108,30 +125,41 @@ std::vector<int> PmergeMe::sort_vec(std::vector<int> values)
 			losers.push_back(num1);
 		}
 	}
+
+	if (straggler != -1)
+		losers.push_back(straggler);
+
+	// Recursion
 	std::vector<int> sortedWinners = sort_vec(winners);
 	std::vector<int> chain = sortedWinners;
 
-	// Insert each winner's loser, in sorted-winner order
-	for (size_t k = 0; k < sortedWinners.size(); k++)
+	// b1: the loser of the smallest winner always goes at the front, no search needed
+	size_t first = std::find(winners.begin(), winners.end(), sortedWinners[0]) - winners.begin();
+	chain.insert(chain.begin(), losers[first]);
+
+	// Everything else, in Jacobsthal order
+	std::vector<size_t> order = insertionOrder(losers.size());
+	for (size_t n = 0; n < order.size(); n++)
 	{
-		// Find which loser belongs to this winner (via its position in the ORIGINAL winners vector)
-		size_t idx = std::find(winners.begin(), winners.end(), sortedWinners[k]) - winners.begin();
-		int loser = losers[idx];
+		size_t idx = order[n];              // 1-based b index
+		int value;
+		std::vector<int>::iterator bound;
 
-		// The loser is guaranteed <= its winner, so only search up to the winner's position
-		std::vector<int>::iterator winnerPos =
-			std::find(chain.begin(), chain.end(), sortedWinners[k]);
-		std::vector<int>::iterator pos = std::lower_bound(chain.begin(), winnerPos, loser);
-		chain.insert(pos, loser);
+		if (idx <= sortedWinners.size())    // has a winner
+		{
+			int winner = sortedWinners[idx - 1];
+			size_t orig = std::find(winners.begin(), winners.end(), winner) - winners.begin();
+			value = losers[orig];
+			bound = std::find(chain.begin(), chain.end(), winner);  // recompute each time
+		}
+		else                                // the straggler: no winner, search the whole chain
+		{
+			value = losers.back();
+			bound = chain.end();
+		}
+		chain.insert(std::lower_bound(chain.begin(), bound, value), value);
 	}
-
-	// Straggler has no winner, so search the whole chain
-	if (straggler >= 0)
-	{
-		std::vector<int>::iterator pos = std::lower_bound(chain.begin(), chain.end(), straggler);
-		chain.insert(pos, straggler);
-	}
-
 	return chain;
 }
+
 
