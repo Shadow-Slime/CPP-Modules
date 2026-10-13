@@ -8,6 +8,17 @@
 #include <algorithm>
 #include <limits>
 
+struct CountingLess
+{
+	size_t *count;
+	CountingLess(size_t *c) : count(c) {}
+	bool operator()(int a, int b) const
+	{
+		++(*count);
+		return a < b;
+	}
+};
+
 class PmergeMe
 {
 	public:
@@ -20,12 +31,13 @@ class PmergeMe
 		void displayDeq(void);
 		std::vector<size_t> insertionOrder(size_t m);
 		std::vector<int> sort_vec(std::vector<int> values);
-		void sort_deq(void);
+		std::deque<int> sort_deq(std::deque<int> values);
 		std::vector<int> vec;
 		std::deque<int> deq;
 	private:
 		// std::vector<int> vec;
 		// std::deque<int> deq;
+		size_t comparisons;
 };
 
 #endif

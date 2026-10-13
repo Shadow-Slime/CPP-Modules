@@ -2,7 +2,7 @@
 
 PmergeMe::PmergeMe()
 {
-
+	comparisons = 0;
 }
 
 PmergeMe::~PmergeMe()
@@ -94,7 +94,7 @@ std::vector<int> PmergeMe::sort_vec(std::vector<int> values)
 	std::vector<int> losers;
 	size_t sample_size = values.size();
 	//std::cout << sample_size << std::endl;
-	if (sample_size == 1)
+	if (sample_size <= 1)
 	{
 		std::vector<int> ret;
 		ret.push_back(values[0]);
@@ -114,6 +114,7 @@ std::vector<int> PmergeMe::sort_vec(std::vector<int> values)
 	{
 		int num1 = *it;
 		int num2 = *(it + 1);
+		++comparisons;		
 		if (num1 > num2)
 		{
 			winners.push_back(num1);
@@ -144,6 +145,84 @@ std::vector<int> PmergeMe::sort_vec(std::vector<int> values)
 		size_t idx = order[n];              // 1-based b index
 		int value;
 		std::vector<int>::iterator bound;
+
+		if (idx <= sortedWinners.size())    // has a winner
+		{
+			int winner = sortedWinners[idx - 1];
+			size_t orig = std::find(winners.begin(), winners.end(), winner) - winners.begin();
+			value = losers[orig];
+			bound = std::find(chain.begin(), chain.end(), winner);  // recompute each time
+		}
+		else                                // the straggler: no winner, search the whole chain
+		{
+			value = losers.back();
+			bound = chain.end();
+		}
+		chain.insert(std::lower_bound(chain.begin(), bound, value, CountingLess(&comparisons)), value);
+	}
+
+	//std::cout << "\nComparisons: " << comparisons << std::endl;
+	
+	return chain;
+}
+
+std::deque<int> PmergeMe::sort_deq(std::deque<int> values)
+{
+	//std::sort(vec.begin(), vec.end());
+	std::deque<int> winners;
+	std::deque<int> losers;
+	size_t sample_size = values.size();
+	//std::cout << sample_size << std::endl;
+	if (sample_size <= 1)
+	{
+		std::deque<int> ret;
+		ret.push_back(values[0]);
+		return ret;
+	}
+	
+	// winners.reserve(sample_size % 2);
+	// losers.reserve(sample_size % 2);
+
+	int straggler = -1;
+	if (sample_size % 2)
+	{
+		straggler = values.back();
+		values.pop_back();
+	}
+	for (std::deque<int>::const_iterator it = values.begin(); it != values.end(); it += 2)
+	{
+		int num1 = *it;
+		int num2 = *(it + 1);
+		if (num1 > num2)
+		{
+			winners.push_back(num1);
+			losers.push_back(num2);
+		}
+		else
+		{
+			winners.push_back(num2);
+			losers.push_back(num1);
+		}
+	}
+
+	if (straggler != -1)
+		losers.push_back(straggler);
+
+	// Recursion
+	std::deque<int> sortedWinners = sort_deq(winners);
+	std::deque<int> chain = sortedWinners;
+
+	// b1: the loser of the smallest winner always goes at the front, no search needed
+	size_t first = std::find(winners.begin(), winners.end(), sortedWinners[0]) - winners.begin();
+	chain.insert(chain.begin(), losers[first]);
+
+	// Everything else, in Jacobsthal order
+	std::vector<size_t> order = insertionOrder(losers.size());
+	for (size_t n = 0; n < order.size(); n++)
+	{
+		size_t idx = order[n];              // 1-based b index
+		int value;
+		std::deque<int>::iterator bound;
 
 		if (idx <= sortedWinners.size())    // has a winner
 		{
