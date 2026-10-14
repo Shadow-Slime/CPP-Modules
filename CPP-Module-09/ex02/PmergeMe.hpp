@@ -11,7 +11,7 @@
 struct CountingLess
 {
 	size_t *count;
-	CountingLess(size_t *c) : count(c) {}
+	CountingLess(size_t *c);
 	bool operator()(int a, int b) const
 	{
 		++(*count);
@@ -32,11 +32,10 @@ class PmergeMe
 		std::vector<size_t> insertionOrder(size_t m);
 		std::vector<int> sort_vec(std::vector<int> values);
 		std::deque<int> sort_deq(std::deque<int> values);
+		void run(void);
+	private:
 		std::vector<int> vec;
 		std::deque<int> deq;
-	private:
-		// std::vector<int> vec;
-		// std::deque<int> deq;
 		size_t comparisons;
 };
 

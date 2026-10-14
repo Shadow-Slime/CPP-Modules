@@ -1,5 +1,10 @@
 #include "PmergeMe.hpp"
 
+CountingLess::CountingLess(size_t *c) : count(c) 
+{
+
+}
+
 PmergeMe::PmergeMe()
 {
 	comparisons = 0;
@@ -193,6 +198,7 @@ std::deque<int> PmergeMe::sort_deq(std::deque<int> values)
 	{
 		int num1 = *it;
 		int num2 = *(it + 1);
+		++comparisons;
 		if (num1 > num2)
 		{
 			winners.push_back(num1);
@@ -236,9 +242,29 @@ std::deque<int> PmergeMe::sort_deq(std::deque<int> values)
 			value = losers.back();
 			bound = chain.end();
 		}
-		chain.insert(std::lower_bound(chain.begin(), bound, value), value);
+		chain.insert(std::lower_bound(chain.begin(), bound, value, CountingLess(&comparisons)), value);
 	}
 	return chain;
+}
+
+void PmergeMe::run(void)
+{
+	std::cout << "Before: ";
+	displayVec();
+
+	comparisons = 0;
+	this->vec = sort_vec(vec);
+	size_t vec_comparisons = comparisons;
+
+	comparisons = 0;
+	this->deq = sort_deq(deq);
+	size_t deq_comparisons = comparisons;
+
+	std::cout << "After: ";
+	displayVec();
+
+	std::cout << "Vector implementation comparisons: " << vec_comparisons << std::endl;
+	std::cout << "Deque implementation comparisons: " << deq_comparisons << std::endl;
 }
 
 
