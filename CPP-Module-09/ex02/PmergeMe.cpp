@@ -17,7 +17,7 @@ PmergeMe::~PmergeMe()
 
 static bool isValidNum(long num, const std::vector<int> &vec)
 {
-	if (num > std::numeric_limits<int>::max() || num < std::numeric_limits<int>::min())
+	if (num < 0 || num > std::numeric_limits<int>::max())
 		return false;
 	for (std::vector<int>::const_iterator it = vec.begin(); it != vec.end(); it++)
 	{
@@ -30,7 +30,10 @@ static bool isValidNum(long num, const std::vector<int> &vec)
 bool PmergeMe::validInput(int argc, char **argv)
 {
 	if (argc <= 1)
+	{
+		std::cerr << "Empty input\n";
 		return false;
+	}
 	vec.reserve(argc - 1);
 	long val = 0;
 	
@@ -39,12 +42,12 @@ bool PmergeMe::validInput(int argc, char **argv)
 		std::istringstream iss(argv[i]);
 		if (!(iss >> val) || !iss.eof())
 		{
-			std::cout << "Invalid Input" << std::endl;
+			std::cout << "Invalid input\n";
 			return false;
 		}
 		if (!isValidNum(val, this->vec))
 		{
-			std::cout << "Duplicate or out of bounds input" << std::endl;
+			std::cout << "Duplicate or out of bounds input\n";
 			return false;
 		}
 		vec.push_back(val);
@@ -99,15 +102,15 @@ std::vector<int> PmergeMe::sort_vec(std::vector<int> values)
 	std::vector<int> losers;
 	size_t sample_size = values.size();
 	//std::cout << sample_size << std::endl;
-	if (sample_size <= 1)
+	if (sample_size == 1)
 	{
 		std::vector<int> ret;
 		ret.push_back(values[0]);
 		return ret;
 	}
 	
-	winners.reserve(sample_size % 2);
-	losers.reserve(sample_size % 2);
+	winners.reserve(sample_size / 2);
+	losers.reserve(sample_size / 2);
 
 	int straggler = -1;
 	if (sample_size % 2)
@@ -178,16 +181,13 @@ std::deque<int> PmergeMe::sort_deq(std::deque<int> values)
 	std::deque<int> losers;
 	size_t sample_size = values.size();
 	//std::cout << sample_size << std::endl;
-	if (sample_size <= 1)
+	if (sample_size == 1)
 	{
 		std::deque<int> ret;
 		ret.push_back(values[0]);
 		return ret;
 	}
 	
-	// winners.reserve(sample_size % 2);
-	// losers.reserve(sample_size % 2);
-
 	int straggler = -1;
 	if (sample_size % 2)
 	{
@@ -263,7 +263,6 @@ void PmergeMe::run(void)
 	this->vec = sort_vec(vec);
 	double vec_time = nowMicroseconds() - start_vec;
 	size_t vec_comparisons = comparisons;
-	
 
 	comparisons = 0;
 	double start_deq = nowMicroseconds();
@@ -274,9 +273,9 @@ void PmergeMe::run(void)
 	std::cout << "After: ";
 	displayVec();
 
-	std::cout << "Time to process " << vec.size() << " elements with std::vector: " << vec_time << " us" << std::endl;
+	std::cout << "Time to process a range of " << vec.size() << " elements with std::vector: " << vec_time << " us" << std::endl;
+	std::cout << "Time to process a range of " << deq.size() << " elements with std::deque: " << deq_time << " us" << std::endl;
 	std::cout << "Vector implementation comparisons: " << vec_comparisons << std::endl;
-	std::cout << "Time to process " << deq.size() << " elements with std::deque: " << deq_time << " us" << std::endl;
 	std::cout << "Deque implementation comparisons: " << deq_comparisons << std::endl;
 }
 
