@@ -246,6 +246,12 @@ std::deque<int> PmergeMe::sort_deq(std::deque<int> values)
 	}
 	return chain;
 }
+static double nowMicroseconds(void)
+{
+	struct timespec ts;
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+	return ts.tv_sec * 1000000.0 + ts.tv_nsec / 1000.0;
+}
 
 void PmergeMe::run(void)
 {
@@ -253,17 +259,24 @@ void PmergeMe::run(void)
 	displayVec();
 
 	comparisons = 0;
+	double start_vec = nowMicroseconds();
 	this->vec = sort_vec(vec);
+	double vec_time = nowMicroseconds() - start_vec;
 	size_t vec_comparisons = comparisons;
+	
 
 	comparisons = 0;
+	double start_deq = nowMicroseconds();
 	this->deq = sort_deq(deq);
+	double deq_time = nowMicroseconds() - start_deq;
 	size_t deq_comparisons = comparisons;
 
 	std::cout << "After: ";
 	displayVec();
 
+	std::cout << "Time to process " << vec.size() << " elements with std::vector: " << vec_time << " us" << std::endl;
 	std::cout << "Vector implementation comparisons: " << vec_comparisons << std::endl;
+	std::cout << "Time to process " << deq.size() << " elements with std::deque: " << deq_time << " us" << std::endl;
 	std::cout << "Deque implementation comparisons: " << deq_comparisons << std::endl;
 }
 
