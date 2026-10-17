@@ -9,14 +9,14 @@ int main(int argc, char **argv)
 {
 	if (argc != 2)
 	{
-		std::cout << "Error" << std::endl;
+		std::cerr << "Invalid number of arguments\n";
 		return 1;
 	}
 	float result;
 	RPN rpn;
 	if (!rpn.processExpr(argv[1], result))
 	{
-		std::cout << "Error" << std::endl;
+		std::cerr << "Invalid expression";
 		return 1;
 	}
 	std::cout << result << std::endl;
