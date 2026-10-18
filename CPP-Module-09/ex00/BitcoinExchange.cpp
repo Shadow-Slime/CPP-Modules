@@ -73,7 +73,10 @@ static bool isValidDate(std::string date)
 	if (month < 1 || month > 12)
 		return false;
 	static const int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-	if (day <= 0 || (month == 2 && isLeapYear(year) && day > 29) || day > days[month - 1])
+	int maxDay = days[month - 1];
+	if (month == 2 && isLeapYear(year))
+		maxDay = 29;
+	if (day < 1 || day > maxDay)
 		return false;
 	return true;
 }

@@ -35,8 +35,10 @@ bool RPN::processExpr(std::string expr, float &result)
 	float operand2;
 	for (unsigned int i = 0; i < expr.size(); i++)
 	{
-		if ((i != 0 && i % 2 != 0) && expr[i] == ' ')
+		if (i % 2 == 1)
 		{
+			if (expr[i] != ' ')
+				return false;
 			continue;
 		}
 		if (std::isdigit(expr[i]))
