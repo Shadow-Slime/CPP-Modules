@@ -145,6 +145,8 @@ int main()
 	testOutOfBoundsAccess();
 	testSizeConstCorrectness();
 
+	Array<std::string> arr;
+
 	std::cout << "\nAll tests completed." << std::endl;
 	return 0;
 }
