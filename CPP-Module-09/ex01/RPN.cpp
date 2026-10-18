@@ -5,9 +5,23 @@ RPN::RPN()
 
 }
 
+RPN::RPN(const RPN& other)
+{
+	*this = other;
+}
+
 RPN::~RPN()
 {
 
+}
+
+RPN& RPN::operator=(const RPN& other)
+{
+	if (this != &other)
+	{
+		nums = other.nums;
+	}
+	return (*this);
 }
 
 bool RPN::isOperator(char c)

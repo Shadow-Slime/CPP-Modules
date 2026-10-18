@@ -5,9 +5,31 @@ CountingLess::CountingLess(size_t *c) : count(c)
 
 }
 
+bool CountingLess::operator()(int a, int b) const
+{
+	++(*count);
+	return a < b;
+}
+
 PmergeMe::PmergeMe()
 {
 	comparisons = 0;
+}
+
+PmergeMe::PmergeMe(const PmergeMe& other)
+{
+	*this = other;
+}
+
+PmergeMe &PmergeMe::operator=(const PmergeMe& other)
+{
+	if (this != &other)
+	{
+		vec = other.vec;
+		deq = other.deq;
+		comparisons = other.comparisons;
+	}
+	return (*this);
 }
 
 PmergeMe::~PmergeMe()
@@ -42,12 +64,12 @@ bool PmergeMe::validInput(int argc, char **argv)
 		std::istringstream iss(argv[i]);
 		if (!(iss >> val) || !iss.eof())
 		{
-			std::cout << "Invalid input\n";
+			std::cerr << "Invalid input\n";
 			return false;
 		}
 		if (!isValidNum(val, this->vec))
 		{
-			std::cout << "Duplicate or out of bounds input\n";
+			std::cerr << "Duplicate or out of bounds input\n";
 			return false;
 		}
 		vec.push_back(val);

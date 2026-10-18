@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <stack>
+#include <list>
 #include <limits>
 
 class RPN
@@ -15,7 +16,7 @@ class RPN
 		bool isOperator(char c);
 		bool processExpr(std::string expr, float &result);
 	private:
-		std::stack<float> nums;
+		std::stack<float, std::list<float> > nums;
 };
 
 #endif

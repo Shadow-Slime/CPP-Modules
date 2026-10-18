@@ -162,12 +162,12 @@ int BitcoinExchange::processInput(const char *filename)
 		}
 		if (value > 1000)
 		{
-			std::cout << "Error: too large number" << std::endl;
+			std::cout << "Error: too large number." << std::endl;
 			continue;
 		}
 		if (value < 0)
 		{
-			std::cout << "Error: not a positive number" << std::endl;
+			std::cout << "Error: not a positive number." << std::endl;
 			continue;
 		}
 		std::map<std::string, float>::iterator it = data.lower_bound(date);

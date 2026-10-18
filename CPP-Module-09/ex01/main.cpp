@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 	RPN rpn;
 	if (!rpn.processExpr(argv[1], result))
 	{
-		std::cerr << "Invalid expression";
+		std::cerr << "Invalid expression\n";
 		return 1;
 	}
 	std::cout << result << std::endl;

@@ -14,11 +14,7 @@ struct CountingLess
 {
 	size_t *count;
 	CountingLess(size_t *c);
-	bool operator()(int a, int b) const
-	{
-		++(*count);
-		return a < b;
-	}
+	bool operator()(int a, int b) const;
 };
 
 class PmergeMe
