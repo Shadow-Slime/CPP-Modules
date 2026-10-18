@@ -1,6 +1,28 @@
 #include "ScalarConverter.hpp"
 
 
+static void printFloat(float f)
+{
+	std::ios_base::fmtflags flags = std::cout.flags();
+	std::streamsize prec = std::cout.precision();
+	if (f == std::floor(f))
+		std::cout << std::fixed << std::setprecision(1);
+	std::cout << "float: " << f << "f" << std::endl;
+	std::cout.flags(flags);
+	std::cout.precision(prec);
+}
+
+static void printDouble(double d)
+{
+	std::ios_base::fmtflags flags = std::cout.flags();
+	std::streamsize prec = std::cout.precision();
+	if (d == std::floor(d))
+		std::cout << std::fixed << std::setprecision(1);
+	std::cout << "double: " << d << std::endl;
+	std::cout.flags(flags);
+	std::cout.precision(prec);
+}
+
 static void print_pseudo_literal(std::string ps_lit)
 {
 	std::cout << "char: impossible" << std::endl;
@@ -86,8 +108,8 @@ void ScalarConverter::convert(std::string literal)
 		else
 			std::cout << "char: Non displayable" << std::endl;
 		std::cout << "int: " << static_cast<int>(c) << std::endl;
-		std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(c) << "f" << std::endl;
-		std::cout << "double: " << static_cast<double>(c) << std::endl;
+		printFloat(static_cast<float>(c));
+		printDouble(static_cast<double>(c));
 		return ;
 	}
 	if (is_int)
@@ -103,8 +125,8 @@ void ScalarConverter::convert(std::string literal)
 		else
 			std::cout << "char: impossible" << std::endl;
 		std::cout << "int: " << i << std::endl;
-		std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(i) << "f" << std::endl;
-		std::cout << "double: " << static_cast<double>(i) << std::endl;
+		printFloat(static_cast<float>(i));
+		printDouble(static_cast<double>(i));
 		return ;
 	}
 	if (is_float)
@@ -123,8 +145,8 @@ void ScalarConverter::convert(std::string literal)
 			std::cout << "int: " << static_cast<int>(f) << std::endl;
 		else
 			std::cout << "int: impossible" << std::endl;
-		std::cout << "float: " << f << "f" << std::endl;
-		std::cout << "double: " << static_cast<double>(f) << std::endl;
+		printFloat(f);
+		printDouble(static_cast<double>(f));
 		return ;
 	}
 	if (is_double)
@@ -144,10 +166,10 @@ void ScalarConverter::convert(std::string literal)
 		else
 			std::cout << "int: impossible" << std::endl;
 		if (d > -(std::numeric_limits<float>::max()) && d < std::numeric_limits<float>::max())
-			std::cout << "float: " << static_cast<float>(d) << "f" << std::endl;
+			printFloat(static_cast<float>(d));
 		else
 			std::cout << "float: impossible" << std::endl;
-		std::cout << "double: " << d << std::endl;
+		printDouble(d);
 		return ;
 	}
 	std::cout << "char: impossible" << std::endl;

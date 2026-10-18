@@ -92,7 +92,10 @@ static bool isValidValue(std::string valuestr, float &value)
 int BitcoinExchange::createDatamap(void)
 {
 	if (!openFile("data.csv"))
+	{
+		std::cout << "Unable to open file" << std::endl;
 		return 0;			//possibly replaced with exception
+	}
 	std::string buffer;
 	std::getline(file, buffer);
 	if (buffer != "date,exchange_rate")
