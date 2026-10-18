@@ -73,7 +73,7 @@ static bool isValidDate(std::string date)
 	if (month < 1 || month > 12)
 		return false;
 	static const int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-	if (day < 0 || (month == 2 && isLeapYear(year) && day > 29) || day > days[month - 1])
+	if (day <= 0 || (month == 2 && isLeapYear(year) && day > 29) || day > days[month - 1])
 		return false;
 	return true;
 }
@@ -162,7 +162,7 @@ int BitcoinExchange::processInput(const char *filename)
 		}
 		if (value > 1000)
 		{
-			std::cout << "Error: too large number." << std::endl;
+			std::cout << "Error: too large a number." << std::endl;
 			continue;
 		}
 		if (value < 0)

@@ -144,7 +144,7 @@ void ScalarConverter::convert(std::string literal)
 		else
 			std::cout << "int: impossible" << std::endl;
 		if (d > -(std::numeric_limits<float>::max()) && d < std::numeric_limits<float>::max())
-			std::cout << "float: " << static_cast<float>(d) << std::endl;
+			std::cout << "float: " << static_cast<float>(d) << "f" << std::endl;
 		else
 			std::cout << "float: impossible" << std::endl;
 		std::cout << "double: " << d << std::endl;
