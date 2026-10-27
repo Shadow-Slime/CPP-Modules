@@ -10,4 +10,16 @@ Data *Serializer::deserialize(uintptr_t raw)
 	return(reinterpret_cast<Data *>(raw));
 }
 
+Serializer::Serializer(){}
+
+Serializer::Serializer(const Serializer &other)
+{
+	*this = other;
+}
+
+Serializer &Serializer::operator=(const Serializer &other)
+{
+	return *this;
+}
+
 Serializer::~Serializer(){}

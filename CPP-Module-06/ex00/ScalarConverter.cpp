@@ -178,7 +178,16 @@ void ScalarConverter::convert(std::string literal)
 	std::cout << "double: impossible" << std::endl;
 }
 
+ScalarConverter::ScalarConverter(){}
 
+ScalarConverter::ScalarConverter(const ScalarConverter &other)
+{
+	*this = other;
+}
 
+ScalarConverter &ScalarConverter::operator=(const ScalarConverter &other)
+{
+	return *this;
+}
 
 ScalarConverter::~ScalarConverter(){}

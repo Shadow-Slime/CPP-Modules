@@ -1,5 +1,7 @@
 #include "Span.hpp"
 
+Span::Span(){}
+
 Span::Span(unsigned int N) : max_size(N)
 {
 	nums.reserve(N);
@@ -20,7 +22,6 @@ Span &Span::operator=(const Span &other)
 	{
 		this->nums = other.nums;
 		this->max_size = other.max_size;
-
 	}
 	return *this;
 }

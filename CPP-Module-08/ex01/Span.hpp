@@ -9,6 +9,7 @@
 class Span
 {
 	public:
+		Span();
 		Span(unsigned int N);
 		Span(const Span &other);
 		Span &operator=(const Span &other);

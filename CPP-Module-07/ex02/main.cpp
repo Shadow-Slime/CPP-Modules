@@ -2,8 +2,7 @@
 #include <string>
 #include "Array.hpp"
 
-template <typename T>
-static void printArray(const std::string &label, Array<T> &arr)
+template <typename T> static void printArray(const std::string &label, Array<T> &arr)
 {
 	std::cout << label << " [size=" << arr.size() << "]: ";
 	for (unsigned int i = 0; i < arr.size(); i++)
