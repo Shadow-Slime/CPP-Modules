@@ -1,16 +1,5 @@
 #include "PmergeMe.hpp"
 
-CountingLess::CountingLess(size_t *c) : count(c) 
-{
-
-}
-
-bool CountingLess::operator()(int a, int b) const
-{
-	++(*count);
-	return a < b;
-}
-
 PmergeMe::PmergeMe()
 {
 	comparisons = 0;
@@ -37,16 +26,9 @@ PmergeMe::~PmergeMe()
 
 }
 
-static bool isValidNum(long num, const std::vector<int> &vec)
+static bool isValidNum(long num)
 {
-	if (num < 0 || num > std::numeric_limits<int>::max())
-		return false;
-	for (std::vector<int>::const_iterator it = vec.begin(); it != vec.end(); it++)
-	{
-		if (*it == num)
-			return false;
-	}
-	return true;
+	return (num >= 0 && num <= std::numeric_limits<int>::max());
 }
 
 bool PmergeMe::validInput(int argc, char **argv)
@@ -58,7 +40,7 @@ bool PmergeMe::validInput(int argc, char **argv)
 	}
 	vec.reserve(argc - 1);
 	long val = 0;
-	
+
 	for (int i = 1; argv[i]; i++)
 	{
 		std::istringstream iss(argv[i]);
@@ -67,9 +49,9 @@ bool PmergeMe::validInput(int argc, char **argv)
 			std::cerr << "Invalid input\n";
 			return false;
 		}
-		if (!isValidNum(val, this->vec))
+		if (!isValidNum(val))
 		{
-			std::cerr << "Duplicate or out of bounds input\n";
+			std::cerr << "Out of bounds input\n";
 			return false;
 		}
 		vec.push_back(val);
@@ -117,128 +99,46 @@ std::vector<size_t> PmergeMe::insertionOrder(size_t m)   // 1-based indices, exc
 	return order;
 }
 
-std::vector<int> PmergeMe::sort_vec(std::vector<int> values)
+// Sorts indices into `vals` instead of the values themselves, so every element
+// is unique even when the values contain duplicates.
+std::vector<size_t> PmergeMe::sort_vec(const std::vector<int> &vals, std::vector<size_t> idx)
 {
-	//std::sort(vec.begin(), vec.end());
-	std::vector<int> winners;
-	std::vector<int> losers;
-	size_t sample_size = values.size();
-	//std::cout << sample_size << std::endl;
-	if (sample_size == 1)
+	size_t n = idx.size();
+	if (n <= 1)
+		return idx;
+
+	std::vector<size_t> winners;
+	std::vector<size_t> losers;
+	winners.reserve(n / 2);
+	losers.reserve(n / 2 + 1);
+
+	bool hasStraggler = (n % 2 != 0);
+	size_t straggler = 0;
+	if (hasStraggler)
 	{
-		std::vector<int> ret;
-		ret.push_back(values[0]);
-		return ret;
+		straggler = idx.back();
+		idx.pop_back();
 	}
-	
-	winners.reserve(sample_size / 2);
-	losers.reserve(sample_size / 2);
-
-	int straggler = -1;
-	if (sample_size % 2)
+	for (size_t i = 0; i < idx.size(); i += 2)
 	{
-		straggler = values.back();
-		values.pop_back();
-	}
-	for (std::vector<int>::const_iterator it = values.begin(); it != values.end(); it += 2)
-	{
-		int num1 = *it;
-		int num2 = *(it + 1);
-		++comparisons;		
-		if (num1 > num2)
-		{
-			winners.push_back(num1);
-			losers.push_back(num2);
-		}
-		else
-		{
-			winners.push_back(num2);
-			losers.push_back(num1);
-		}
-	}
-
-	if (straggler != -1)
-		losers.push_back(straggler);
-
-	// Recursion
-	std::vector<int> sortedWinners = sort_vec(winners);
-	std::vector<int> chain = sortedWinners;
-
-	// b1: the loser of the smallest winner always goes at the front, no search needed
-	size_t first = std::find(winners.begin(), winners.end(), sortedWinners[0]) - winners.begin();
-	chain.insert(chain.begin(), losers[first]);
-
-	// Everything else, in Jacobsthal order
-	std::vector<size_t> order = insertionOrder(losers.size());
-	for (size_t n = 0; n < order.size(); n++)
-	{
-		size_t idx = order[n];              // 1-based b index
-		int value;
-		std::vector<int>::iterator bound;
-
-		if (idx <= sortedWinners.size())    // has a winner
-		{
-			int winner = sortedWinners[idx - 1];
-			size_t orig = std::find(winners.begin(), winners.end(), winner) - winners.begin();
-			value = losers[orig];
-			bound = std::find(chain.begin(), chain.end(), winner);  // recompute each time
-		}
-		else                                // the straggler: no winner, search the whole chain
-		{
-			value = losers.back();
-			bound = chain.end();
-		}
-		chain.insert(std::lower_bound(chain.begin(), bound, value, CountingLess(&comparisons)), value);
-	}
-
-	//std::cout << "\nComparisons: " << comparisons << std::endl;
-	
-	return chain;
-}
-
-std::deque<int> PmergeMe::sort_deq(std::deque<int> values)
-{
-	//std::sort(vec.begin(), vec.end());
-	std::deque<int> winners;
-	std::deque<int> losers;
-	size_t sample_size = values.size();
-	//std::cout << sample_size << std::endl;
-	if (sample_size == 1)
-	{
-		std::deque<int> ret;
-		ret.push_back(values[0]);
-		return ret;
-	}
-	
-	int straggler = -1;
-	if (sample_size % 2)
-	{
-		straggler = values.back();
-		values.pop_back();
-	}
-	for (std::deque<int>::const_iterator it = values.begin(); it != values.end(); it += 2)
-	{
-		int num1 = *it;
-		int num2 = *(it + 1);
 		++comparisons;
-		if (num1 > num2)
+		if (vals[idx[i]] > vals[idx[i + 1]])
 		{
-			winners.push_back(num1);
-			losers.push_back(num2);
+			winners.push_back(idx[i]);
+			losers.push_back(idx[i + 1]);
 		}
 		else
 		{
-			winners.push_back(num2);
-			losers.push_back(num1);
+			winners.push_back(idx[i + 1]);
+			losers.push_back(idx[i]);
 		}
 	}
-
-	if (straggler != -1)
+	if (hasStraggler)
 		losers.push_back(straggler);
 
 	// Recursion
-	std::deque<int> sortedWinners = sort_deq(winners);
-	std::deque<int> chain = sortedWinners;
+	std::vector<size_t> sortedWinners = sort_vec(vals, winners);
+	std::vector<size_t> chain = sortedWinners;
 
 	// b1: the loser of the smallest winner always goes at the front, no search needed
 	size_t first = std::find(winners.begin(), winners.end(), sortedWinners[0]) - winners.begin();
@@ -246,15 +146,16 @@ std::deque<int> PmergeMe::sort_deq(std::deque<int> values)
 
 	// Everything else, in Jacobsthal order
 	std::vector<size_t> order = insertionOrder(losers.size());
-	for (size_t n = 0; n < order.size(); n++)
+	IdxLess<std::vector<int> > cmp(&vals, &comparisons);
+	for (size_t k = 0; k < order.size(); k++)
 	{
-		size_t idx = order[n];              // 1-based b index
-		int value;
-		std::deque<int>::iterator bound;
+		size_t b = order[k];                // 1-based b index
+		size_t value;
+		std::vector<size_t>::iterator bound;
 
-		if (idx <= sortedWinners.size())    // has a winner
+		if (b <= sortedWinners.size())      // has a winner
 		{
-			int winner = sortedWinners[idx - 1];
+			size_t winner = sortedWinners[b - 1];
 			size_t orig = std::find(winners.begin(), winners.end(), winner) - winners.begin();
 			value = losers[orig];
 			bound = std::find(chain.begin(), chain.end(), winner);  // recompute each time
@@ -264,10 +165,78 @@ std::deque<int> PmergeMe::sort_deq(std::deque<int> values)
 			value = losers.back();
 			bound = chain.end();
 		}
-		chain.insert(std::lower_bound(chain.begin(), bound, value, CountingLess(&comparisons)), value);
+		chain.insert(std::lower_bound(chain.begin(), bound, value, cmp), value);
 	}
 	return chain;
 }
+
+std::deque<size_t> PmergeMe::sort_deq(const std::deque<int> &vals, std::deque<size_t> idx)
+{
+	size_t n = idx.size();
+	if (n <= 1)
+		return idx;
+
+	std::deque<size_t> winners;
+	std::deque<size_t> losers;
+
+	bool hasStraggler = (n % 2 != 0);
+	size_t straggler = 0;
+	if (hasStraggler)
+	{
+		straggler = idx.back();
+		idx.pop_back();
+	}
+	for (size_t i = 0; i < idx.size(); i += 2)
+	{
+		++comparisons;
+		if (vals[idx[i]] > vals[idx[i + 1]])
+		{
+			winners.push_back(idx[i]);
+			losers.push_back(idx[i + 1]);
+		}
+		else
+		{
+			winners.push_back(idx[i + 1]);
+			losers.push_back(idx[i]);
+		}
+	}
+	if (hasStraggler)
+		losers.push_back(straggler);
+
+	// Recursion
+	std::deque<size_t> sortedWinners = sort_deq(vals, winners);
+	std::deque<size_t> chain = sortedWinners;
+
+	// b1: the loser of the smallest winner always goes at the front, no search needed
+	size_t first = std::find(winners.begin(), winners.end(), sortedWinners[0]) - winners.begin();
+	chain.insert(chain.begin(), losers[first]);
+
+	// Everything else, in Jacobsthal order
+	std::vector<size_t> order = insertionOrder(losers.size());
+	IdxLess<std::deque<int> > cmp(&vals, &comparisons);
+	for (size_t k = 0; k < order.size(); k++)
+	{
+		size_t b = order[k];                // 1-based b index
+		size_t value;
+		std::deque<size_t>::iterator bound;
+
+		if (b <= sortedWinners.size())      // has a winner
+		{
+			size_t winner = sortedWinners[b - 1];
+			size_t orig = std::find(winners.begin(), winners.end(), winner) - winners.begin();
+			value = losers[orig];
+			bound = std::find(chain.begin(), chain.end(), winner);  // recompute each time
+		}
+		else                                // the straggler: no winner, search the whole chain
+		{
+			value = losers.back();
+			bound = chain.end();
+		}
+		chain.insert(std::lower_bound(chain.begin(), bound, value, cmp), value);
+	}
+	return chain;
+}
+
 static double nowMicroseconds(void)
 {
 	struct timespec ts;
@@ -280,15 +249,32 @@ void PmergeMe::run(void)
 	std::cout << "Before: ";
 	displayVec();
 
+	// vector (index setup and rebuild are inside the timed region, same as for the deque)
 	comparisons = 0;
 	double start_vec = nowMicroseconds();
-	this->vec = sort_vec(vec);
+	std::vector<size_t> vecIdx(vec.size());
+	for (size_t i = 0; i < vecIdx.size(); i++)
+		vecIdx[i] = i;
+	std::vector<size_t> sortedVecIdx = sort_vec(vec, vecIdx);
+	std::vector<int> sortedVec;
+	sortedVec.reserve(sortedVecIdx.size());
+	for (size_t i = 0; i < sortedVecIdx.size(); i++)
+		sortedVec.push_back(vec[sortedVecIdx[i]]);
+	this->vec = sortedVec;
 	double vec_time = nowMicroseconds() - start_vec;
 	size_t vec_comparisons = comparisons;
 
+	// deque
 	comparisons = 0;
 	double start_deq = nowMicroseconds();
-	this->deq = sort_deq(deq);
+	std::deque<size_t> deqIdx;
+	for (size_t i = 0; i < deq.size(); i++)
+		deqIdx.push_back(i);
+	std::deque<size_t> sortedDeqIdx = sort_deq(deq, deqIdx);
+	std::deque<int> sortedDeq;
+	for (size_t i = 0; i < sortedDeqIdx.size(); i++)
+		sortedDeq.push_back(deq[sortedDeqIdx[i]]);
+	this->deq = sortedDeq;
 	double deq_time = nowMicroseconds() - start_deq;
 	size_t deq_comparisons = comparisons;
 
@@ -300,5 +286,3 @@ void PmergeMe::run(void)
 	std::cout << "Vector implementation comparisons: " << vec_comparisons << std::endl;
 	std::cout << "Deque implementation comparisons: " << deq_comparisons << std::endl;
 }
-
-

@@ -10,11 +10,17 @@
 #include <ctime>
 #include <iomanip>
 
-struct CountingLess
+template <typename C>
+struct IdxLess
 {
-	size_t *count;
-	CountingLess(size_t *c);
-	bool operator()(int a, int b) const;
+	const C *vals;
+	size_t  *count;
+	IdxLess(const C *v, size_t *c) : vals(v), count(c) {}
+	bool operator()(size_t a, size_t b) const
+	{
+		++(*count);
+		return (*vals)[a] < (*vals)[b];
+	}
 };
 
 class PmergeMe
@@ -28,8 +34,8 @@ class PmergeMe
 		void displayVec(void);
 		void displayDeq(void);
 		std::vector<size_t> insertionOrder(size_t m);
-		std::vector<int> sort_vec(std::vector<int> values);
-		std::deque<int> sort_deq(std::deque<int> values);
+		std::vector<size_t> sort_vec(const std::vector<int> &vals, std::vector<size_t> idx);
+		std::deque<size_t>  sort_deq(const std::deque<int> &vals, std::deque<size_t> idx);
 		void run(void);
 	private:
 		std::vector<int> vec;
